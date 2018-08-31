@@ -30,24 +30,25 @@ echo "This directory shall be renamed to '$ANSIBLE_ROLE' as part of the re-confi
 echo -n "Initialise Role? [Y/N]: "
 read OPTION
 
-if [ "Y" == "$OPTION" || "y" == "$OPTION" ]
+if [[ "Y" == "$OPTION" || "y" == "$OPTION" ]]
 then
     echo -n "Removing git configuration for ansible-role-template..."
     rm -rf $TEMPLATE_DIR/.git
     echo "OK"
 
-    echo -n "Configuring for git repostiory: $REPOSITORY_URL..."
+    echo "Configuring for git repostiory: $REPOSITORY_URL..."
     cd $TEMPLATE_DIR
     git init
+    echo "Adding new origin: $REPOSITORY_URL"
     git remote add origin $REPOSITORY_URL
     echo "OK"
 
-    echo -n "Reconfiguring for Ansible Galaxy..."
+    echo "Reconfiguring for Ansible Galaxy..."
     cd $TEMPLATE_DIR
-    CURRENT_DIR = basename `pwd`
+    CURRENT_DIR=`basename "$TEMPLATE_DIR"`
     cd ..
-    mv $CURRENT_DIR $ANSIBLE_ROLE
-    NEW_FULL_PATH = `pwd`/$ANSIBLE_ROLE
+    mv "$CURRENT_DIR" "$ANSIBLE_ROLE"
+    NEW_FULL_PATH=`pwd`/$ANSIBLE_ROLE
     ansible-galaxy init $ANSIBLE_ROLE --force
     echo "OK"
 
